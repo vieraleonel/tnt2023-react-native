@@ -1,4 +1,7 @@
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
+import { HomeLink } from "./HomeLink";
 
 export default function App() {
   return (
@@ -10,8 +13,8 @@ export default function App() {
           flex: 1,
         }}
       >
-        <Text style={styles.titulo}>Home</Text>
-        <Text style={styles.subtitulo}>Overview</Text>
+        <Text style={styles.titulo}>Inicio</Text>
+        <Text style={styles.subtitulo}>Resumen</Text>
 
         <View
           style={{
@@ -19,41 +22,46 @@ export default function App() {
             justifyContent: "space-between",
           }}
         >
-          <View style={styles.cuadrado}></View>
-          <View style={styles.cuadrado}></View>
-          <View style={styles.cuadrado}></View>
+          <View style={styles.cuadrado}>
+            <Text>
+              <Ionicons name="chatbubbles-sharp" size={15} color="#0070F0" />
+            </Text>
+          </View>
+          <View style={styles.cuadrado}>
+            <Text>2</Text>
+          </View>
+          <View style={styles.cuadrado}>
+            <Text>3</Text>
+          </View>
         </View>
+
         <View
           style={{
             justifyContent: "space-around",
             flex: 1,
           }}
         >
-          <View style={[styles.rectangulo, { backgroundColor: "#FFF9F0" }]}>
-            <View>
-              <Text style={styles.subtitulo}>Overview</Text>
-              <Text style={styles.subtitulo}>Overview</Text>
-            </View>
-            <View
-              style={{
-                borderRadius: 48,
-                backgroundColor: "white",
-                height: 30,
-                width: 70,
-                padding: 9,
-              }}
-            >
-              <Text style={{ fontSize: 10, lineHeight: 12, color: "#A05E03" }}>
-                WARM-UP
-              </Text>
-            </View>
-          </View>
-          <View
-            style={[styles.rectangulo, { backgroundColor: "#F0F0FF" }]}
-          ></View>
-          <View
-            style={[styles.rectangulo, { backgroundColor: "#FFF0FD" }]}
-          ></View>
+          <HomeLink
+            colorFondo="#FFF9F0"
+            colorAccionTexto="#A05E03"
+            titulo="Canal de texto"
+            subtitulo="Chatea con la IA"
+            accionTexto="chateá"
+          />
+          <HomeLink
+            colorFondo="#F0F0FF"
+            colorAccionTexto="#5555CB"
+            titulo="Canal de imagen"
+            subtitulo="Imágenes desde en imágenes"
+            accionTexto="creá"
+          />
+          <HomeLink
+            colorFondo="#FFF0FD"
+            colorAccionTexto="#CB55AA"
+            titulo="Canal de voz"
+            subtitulo="Convertí voz a texto"
+            accionTexto="hablá"
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -77,16 +85,6 @@ const styles = StyleSheet.create({
   cuadrado: {
     width: 100,
     height: 100,
-    backgroundColor: "green",
-  },
-  rectangulo: {
-    width: "100%",
-    height: 100,
-    borderRadius: 24,
-    paddingLeft: 24,
-    paddingTop: 20,
-    paddingRight: 84,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    backgroundColor: "yellow",
   },
 });
