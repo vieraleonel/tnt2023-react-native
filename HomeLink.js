@@ -1,4 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
+import { useFonts } from "expo-font";
+
 const HomeLink = ({
   colorFondo,
   colorAccionTexto,
@@ -6,6 +8,15 @@ const HomeLink = ({
   subtitulo,
   accionTexto,
 }) => {
+  const [fontsLoaded] = useFonts({
+    "DM Sans Bold": require("./assets/fonts/DMSans/DMSans-Bold.ttf"),
+    "DM Sans Medium": require("./assets/fonts/DMSans/DMSans-Medium.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <View style={[styles.rectangulo, { backgroundColor: colorFondo }]}>
       <View>
@@ -35,11 +46,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   rectanguloTitulo: {
+    fontFamily: "DM Sans Bold",
     fontSize: 18,
     fontWeight: "bold",
     lineHeight: 24,
   },
   rectanguloSubtitulo: {
+    fontFamily: "DM Sans Medium",
     marginTop: 4,
     fontSize: 12,
     lineHeight: 12,
