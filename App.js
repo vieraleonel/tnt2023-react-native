@@ -1,90 +1,19 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { NavigationContainer } from "@react-navigation/native";
+import { HomeScreen } from "./HomeScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { ChatScreen } from "./ChatScreen";
+import { ROUTES } from "./routes";
 
-import { HomeLink } from "./HomeLink";
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          marginTop: 30,
-          marginHorizontal: 10,
-          flex: 1,
-        }}
-      >
-        <Text style={styles.titulo}>Inicio</Text>
-        <Text style={styles.subtitulo}>Resumen</Text>
-
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <View style={styles.cuadrado}>
-            <Text>
-              <Ionicons name="chatbubbles-sharp" size={15} color="#0070F0" />
-            </Text>
-          </View>
-          <View style={styles.cuadrado}>
-            <Text>2</Text>
-          </View>
-          <View style={styles.cuadrado}>
-            <Text>3</Text>
-          </View>
-        </View>
-
-        <View
-          style={{
-            justifyContent: "space-around",
-            flex: 1,
-          }}
-        >
-          <HomeLink
-            colorFondo="#FFF9F0"
-            colorAccionTexto="#A05E03"
-            titulo="Canal de texto"
-            subtitulo="Chatea con la IA"
-            accionTexto="chateá"
-          />
-          <HomeLink
-            colorFondo="#F0F0FF"
-            colorAccionTexto="#5555CB"
-            titulo="Canal de imagen"
-            subtitulo="Imágenes desde en imágenes"
-            accionTexto="creá"
-          />
-          <HomeLink
-            colorFondo="#FFF0FD"
-            colorAccionTexto="#CB55AA"
-            titulo="Canal de voz"
-            subtitulo="Convertí voz a texto"
-            accionTexto="hablá"
-          />
-        </View>
-      </View>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Tab.Navigator screenOptions={{ headerShown: false }}>
+        <Tab.Screen name={ROUTES.HOME} component={HomeScreen} />
+        <Tab.Screen name={ROUTES.CHAT} component={ChatScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  titulo: {
-    fontSize: 24,
-    fontWeight: "bold",
-    lineHeight: 32,
-  },
-  subtitulo: {
-    fontSize: 18,
-    fontWeight: "bold",
-    lineHeight: 24,
-  },
-  cuadrado: {
-    width: 100,
-    height: 100,
-    backgroundColor: "yellow",
-  },
-});
