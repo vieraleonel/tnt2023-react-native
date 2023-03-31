@@ -57,7 +57,6 @@ const HomeScreen = () => {
             justifyContent: "space-around",
           }}
         >
-          <Button title="ESTO ES UN BOTON" />
           <Pressable onPressIn={_handlePress}>
             <HomeLink
               colorFondo="#FFF9F0"
