@@ -9,8 +9,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { HomeLink } from "./HomeLink";
-import { ROUTES } from "./routes";
+import { HomeLink } from "../components/HomeLink";
+import { ROUTES } from "../navigation/routes";
 
 const HomeScreen = () => {
   const navigation = useNavigation();

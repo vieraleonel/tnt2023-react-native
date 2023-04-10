@@ -11,7 +11,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 
-import { HomeLink } from "./HomeLink";
+import { HomeLink } from "../components/HomeLink";
 import { useIsFocused } from "@react-navigation/native";
 
 const ChatScreen = () => {
