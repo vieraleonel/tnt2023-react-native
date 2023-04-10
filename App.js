@@ -1,6 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { HomeScreen } from "./HomeScreen";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ChatScreen } from "./ChatScreen";
 import { ROUTES } from "./routes";
