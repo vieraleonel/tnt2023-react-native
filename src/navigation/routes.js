@@ -1,9 +1,8 @@
 const ROUTES = {
   HOME: "/",
-  CHAT: "/chat",
+  TEXT: "/text",
   IMAGE: "/image",
   VOICE: "/voice",
-  TEST: "/test",
 };
 
 export { ROUTES };

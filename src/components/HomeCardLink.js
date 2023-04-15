@@ -1,22 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useFonts } from "expo-font";
 
-const HomeLink = ({
+const HomeCardLink = ({
   colorFondo,
   colorAccionTexto,
   titulo,
   subtitulo,
   accionTexto,
 }) => {
-  const [fontsLoaded] = useFonts({
-    "DM Sans Bold": require("../../assets/fonts/DMSans/DMSans-Bold.ttf"),
-    "DM Sans Medium": require("../../assets/fonts/DMSans/DMSans-Medium.ttf"),
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
     <View style={[styles.rectangulo, { backgroundColor: colorFondo }]}>
       <View>
@@ -72,4 +62,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { HomeLink };
+export { HomeCardLink };

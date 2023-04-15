@@ -1,35 +1,62 @@
-import {
-  Button,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { HomeLink } from "../components/HomeLink";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { HomeCardLink } from "../components/HomeCardLink";
 import { ROUTES } from "../navigation/routes";
+import { SafeScreen } from "../components/SafeScreen";
+import { HomeResumenCard } from "../components/HomeResumenCard";
+import { useNavigation } from "@react-navigation/native";
+
+const resumenData = [
+  { iconName: "chatbubbles-sharp", data: 3950, description: "Rtas gen." },
+  { iconName: "image", data: 1000, description: "Img. gen." },
+  { iconName: "mic", data: 15, description: "Trad. real." },
+];
+
+const homeCardLinkData = [
+  {
+    colorFondo: "#FFF9F0",
+    colorAccionTexto: "#A05E03",
+    titulo: "Canal de texto",
+    subtitulo: "Chatea con la IA",
+    accionTexto: "chateá",
+    routeName: ROUTES.TEXT,
+  },
+  {
+    colorFondo: "#F0F0FF",
+    colorAccionTexto: "#5555CB",
+    titulo: "Canal de imagen",
+    subtitulo: "Imágenes desde en imágenes",
+    accionTexto: "creá",
+    routeName: ROUTES.IMAGE,
+  },
+  {
+    colorFondo: "#FFF0FD",
+    colorAccionTexto: "#CB55AA",
+    titulo: "Canal de voz",
+    subtitulo: "Convertí voz a texto",
+    accionTexto: "hablá",
+    routeName: ROUTES.VOICE,
+  },
+];
 
 const HomeScreen = () => {
   const navigation = useNavigation();
 
-  const _handlePress = () => {
-    navigation.navigate(ROUTES.CHAT);
-  };
+  const navToScreen = (routeName) => () => navigation.navigate(routeName);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeScreen>
       <View
         style={{
-          marginTop: 30,
+          marginTop: 20,
           marginHorizontal: 10,
+          gap: 20,
           flex: 1,
         }}
       >
-        <Text style={styles.titulo}>Inicio</Text>
-        <Text style={styles.subtitulo}>Resumen</Text>
+        <View>
+          <Text style={styles.titulo}>Inicio</Text>
+          <Text style={styles.subtitulo}>Resumen</Text>
+        </View>
 
         <View
           style={{
@@ -37,52 +64,31 @@ const HomeScreen = () => {
             justifyContent: "space-between",
           }}
         >
-          <View style={styles.cuadrado}>
-            <Text>
-              <Ionicons name="chatbubbles-sharp" size={15} color="#0070F0" />
-            </Text>
-          </View>
-
-          <View style={styles.cuadrado}>
-            <Text>2</Text>
-          </View>
-          <View style={styles.cuadrado}>
-            <Text>3</Text>
-          </View>
+          {resumenData.map((item) => (
+            <HomeResumenCard
+              key={item.iconName}
+              {...item}
+              // data={item.data}
+              // description={item.description}
+              // iconName={item.iconName}
+            />
+          ))}
         </View>
 
         <View
           style={{
             flex: 1,
-            justifyContent: "space-around",
+            gap: 25,
           }}
         >
-          <Pressable onPressIn={_handlePress}>
-            <HomeLink
-              colorFondo="#FFF9F0"
-              colorAccionTexto="#A05E03"
-              titulo="Canal de texto"
-              subtitulo="Chatea con la IA"
-              accionTexto="chateá"
-            />
-          </Pressable>
-          <HomeLink
-            colorFondo="#F0F0FF"
-            colorAccionTexto="#5555CB"
-            titulo="Canal de imagen"
-            subtitulo="Imágenes desde en imágenes"
-            accionTexto="creá"
-          />
-          <HomeLink
-            colorFondo="#FFF0FD"
-            colorAccionTexto="#CB55AA"
-            titulo="Canal de voz"
-            subtitulo="Convertí voz a texto"
-            accionTexto="hablá"
-          />
+          {homeCardLinkData.map((item) => (
+            <Pressable onPress={navToScreen(item.routeName)} key={item.titulo}>
+              <HomeCardLink {...item} />
+            </Pressable>
+          ))}
         </View>
       </View>
-    </SafeAreaView>
+    </SafeScreen>
   );
 };
 
