@@ -12,163 +12,78 @@ import {
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
 import { SafeScreen } from "../components/SafeScreen";
-import { useState } from "react/cjs/react.development";
 import { colors } from "../theme/colors";
+import { Header } from "../components/Header";
+import { UserTextMessage } from "../components/UserTextMessage";
+import { IaTextMessage } from "../components/IaTextMessage";
+import { useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
+
+// msgs = [
+//   {
+//     // id: 11111,
+//     message: "Hola",
+//     isUser: true,
+//   }
+// ]
 
 const TextScreen = () => {
   const [texto, setTexto] = useState("");
   const [msgs, setMsgs] = useState([]);
+  const isFocused = useIsFocused();
+
+  const fetchApi = async (message) => {
+    try {
+      const response = await fetch(
+        `https://tnt2023.panaltesting.com.ar/chat?question=${message}`
+      );
+      const data = await response.json();
+      setMsgs((messagesUpdated) =>
+        messagesUpdated.concat({ message: data.mensaje, isUser: false })
+      );
+    } catch (error) {
+      console.log("ERROR", error);
+    }
+  };
+
+  useEffect(() => {
+    if (isFocused) {
+    }
+  }, [isFocused]);
+
+  const _addUserMessage = () => {
+    if (texto !== "") {
+      setMsgs(msgs.concat({ message: texto, isUser: true }));
+      fetchApi(texto);
+      setTexto("");
+    }
+  };
 
   return (
     <SafeScreen>
-      <View
-        style={{
-          flexDirection: "row",
-          paddingHorizontal: 40,
-          alignItems: "center",
-          gap: 20,
-          zIndex: 2,
-          marginBottom: 20,
-          backgroundColor: colors.background,
-        }}
-      >
-        <Ionicons
-          name="md-arrow-back-circle-outline"
-          size={44}
-          color="#72777A"
-        />
-        <FontAwesome5 name="robot" size={24} color="black" />
-        <View>
-          <Text
-            style={{
-              fontFamily: "DM Sans Bold",
-              fontSize: 14,
-              color: "#202325",
-            }}
-          >
-            Canal de Texto
-          </Text>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-            <View
-              style={{
-                width: 8,
-                height: 8,
-                backgroundColor: "#7DDE86",
-                borderRadius: 4,
-              }}
-            />
-            <Text
-              style={{
-                fontFamily: "DM Sans Medium",
-                fontSize: 12,
-                color: "#72777A",
-              }}
-            >
-              Siempre activo
-            </Text>
-          </View>
-        </View>
-      </View>
+      <Header title="Canal de Texto" />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
         <ScrollView
-          style={{
-            height: Dimensions.get("screen").height * 0.7,
-            marginHorizontal: 10,
-          }}
+          style={styles.messagesContainer}
           contentContainerStyle={{ gap: 20 }}
         >
-          {/* <View
-            style={{
-              backgroundColor: "#0070F0",
-              padding: 10,
-              borderTopLeftRadius: 24,
-              borderTopRightRadius: 24,
-              borderBottomLeftRadius: 24,
-            }}
-          >
-            <Text
-              style={{
-                color: "white",
-                fontFamily: "DM Sans Medium",
-                fontSize: 15,
-                lineHeight: 24,
-              }}
-            >
-              Hola, podrías contarme en 1 párrafo en que consiste la ley de
-              Moore?
-            </Text>
-          </View>
-          <View
-            style={{
-              backgroundColor: "#F2F4F5",
-              padding: 10,
-              borderBottomLeftRadius: 24,
-              borderBottomRightRadius: 24,
-              borderTopRightRadius: 24,
-            }}
-          >
-            <Text
-              style={{
-                color: "#303437",
-                fontFamily: "DM Sans Medium",
-                fontSize: 15,
-                lineHeight: 24,
-              }}
-            >
-              La Ley de Moore es una observación hecha por el cofundador de
-              Intel, Gordon Moore, en 1965, que afirmaba que el número de
-              transistores en un microprocesador se duplicaría aproximadamente
-              cada dos años, lo que conduciría a un aumento constante en la
-              capacidad de procesamiento y disminución en el costo. Esta ley se
-              ha mantenido en gran medida cierta durante décadas y ha impulsado
-              el rápido avance de la tecnología informática y la electrónica,
-              aunque se ha hecho cada vez más difícil mantener su ritmo en los
-              últimos años debido a limitaciones físicas y técnicas.
-            </Text>
-          </View> */}
-          {msgs.map((msg) => (
-            <View
-              style={{
-                backgroundColor: "#0070F0",
-                padding: 10,
-                borderTopLeftRadius: 24,
-                borderTopRightRadius: 24,
-                borderBottomLeftRadius: 24,
-              }}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  fontFamily: "DM Sans Medium",
-                  fontSize: 15,
-                  lineHeight: 24,
-                }}
-              >
-                {msg}
-              </Text>
-            </View>
-          ))}
+          {msgs.map((msg, index) =>
+            msg.isUser ? (
+              <UserTextMessage message={msg.message} key={index} />
+            ) : (
+              <IaTextMessage message={msg.message} key={index} />
+            )
+          )}
         </ScrollView>
         <View
           style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
         >
-          <View
-            style={{
-              width: 265,
-              height: 45,
-              borderRadius: 22,
-              borderWidth: 1,
-              borderColor: "#979C9E",
-            }}
-          >
+          <View style={styles.inputContainer}>
             <TextInput
               style={{ width: 260, height: 40, paddingHorizontal: 10 }}
               value={texto}
               onChangeText={setTexto}
-              onEndEditing={() => {
-                setMsgs(msgs.concat(texto));
-                setTexto("");
-              }}
+              onSubmitEditing={_addUserMessage}
             />
           </View>
           <Ionicons.Button
@@ -178,11 +93,7 @@ const TextScreen = () => {
             backgroundColor="#303437"
             borderRadius={24}
             iconStyle={{ marginLeft: 5, marginTop: 2 }}
-            onPress={() => {
-              setMsgs(msgs.concat(texto));
-              setTexto("");
-              // llamada a la api
-            }}
+            onPress={_addUserMessage}
           />
         </View>
       </KeyboardAvoidingView>
@@ -197,5 +108,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  messagesContainer: {
+    height: Dimensions.get("screen").height * 0.7,
+    marginHorizontal: 10,
+  },
+  inputContainer: {
+    width: 265,
+    height: 45,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: "#979C9E",
   },
 });
