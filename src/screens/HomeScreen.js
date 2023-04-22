@@ -3,13 +3,9 @@ import { HomeCardLink } from "../components/HomeCardLink";
 import { ROUTES } from "../navigation/routes";
 import { SafeScreen } from "../components/SafeScreen";
 import { HomeResumenCard } from "../components/HomeResumenCard";
-import { useNavigation } from "@react-navigation/native";
-
-const resumenData = [
-  { iconName: "chatbubbles-sharp", data: 3950, description: "Rtas gen." },
-  { iconName: "image", data: 1000, description: "Img. gen." },
-  { iconName: "mic", data: 15, description: "Trad. real." },
-];
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { getTextResponsesCount } from "../services/analyticsStorageService";
 
 const homeCardLinkData = [
   {
@@ -28,20 +24,25 @@ const homeCardLinkData = [
     accionTexto: "creá",
     routeName: ROUTES.IMAGE,
   },
-  {
-    colorFondo: "#FFF0FD",
-    colorAccionTexto: "#CB55AA",
-    titulo: "Canal de voz",
-    subtitulo: "Convertí voz a texto",
-    accionTexto: "hablá",
-    routeName: ROUTES.VOICE,
-  },
 ];
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const [textCount, setTextCount] = useState(null);
 
   const navToScreen = (routeName) => () => navigation.navigate(routeName);
+
+  const getNewCountValue = async () => {
+    const count = await getTextResponsesCount();
+    setTextCount(count);
+  };
+
+  useEffect(() => {
+    if (isFocused) {
+      getNewCountValue();
+    }
+  }, [isFocused]);
 
   return (
     <SafeScreen>
@@ -64,15 +65,17 @@ const HomeScreen = () => {
             justifyContent: "space-between",
           }}
         >
-          {resumenData.map((item) => (
-            <HomeResumenCard
-              key={item.iconName}
-              {...item}
-              // data={item.data}
-              // description={item.description}
-              // iconName={item.iconName}
-            />
-          ))}
+          <HomeResumenCard
+            iconName="chatbubbles-sharp"
+            data={textCount === null ? "..." : textCount}
+            description="Rtas gen."
+          />
+
+          <HomeResumenCard
+            iconName="image"
+            data={1000}
+            description="Img. gen."
+          />
         </View>
 
         <View

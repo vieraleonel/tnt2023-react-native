@@ -9,53 +9,43 @@ import {
   View,
   Dimensions,
 } from "react-native";
-import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 import { SafeScreen } from "../components/SafeScreen";
-import { colors } from "../theme/colors";
 import { Header } from "../components/Header";
 import { UserTextMessage } from "../components/UserTextMessage";
 import { IaTextMessage } from "../components/IaTextMessage";
-import { useEffect, useState } from "react";
-import { useIsFocused } from "@react-navigation/native";
-
-// msgs = [
-//   {
-//     // id: 11111,
-//     message: "Hola",
-//     isUser: true,
-//   }
-// ]
+import { useState } from "react";
+import { sendQuestionToChatbot } from "../services/IAService";
+import { incrementTextResponsesCount } from "../services/analyticsStorageService";
 
 const TextScreen = () => {
-  const [texto, setTexto] = useState("");
-  const [msgs, setMsgs] = useState([]);
-  const isFocused = useIsFocused();
+  const [question, setQuestion] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
 
   const fetchApi = async (message) => {
     try {
-      const response = await fetch(
-        `https://tnt2023.panaltesting.com.ar/chat?question=${message}`
-      );
-      const data = await response.json();
-      setMsgs((messagesUpdated) =>
-        messagesUpdated.concat({ message: data.mensaje, isUser: false })
+      const answer = await sendQuestionToChatbot(message);
+      let mensajeFinal = answer.mensaje;
+      if (!answer.error) {
+        incrementTextResponsesCount();
+      } else {
+        const mensajeFinal = `ERROR: ${mensajeFinal}`;
+      }
+
+      setChatMessages((chatMessages) =>
+        chatMessages.concat({ message: mensajeFinal, isUser: false })
       );
     } catch (error) {
-      console.log("ERROR", error);
+      console.warn("ERROR", error);
     }
   };
 
-  useEffect(() => {
-    if (isFocused) {
-    }
-  }, [isFocused]);
-
   const _addUserMessage = () => {
-    if (texto !== "") {
-      setMsgs(msgs.concat({ message: texto, isUser: true }));
-      fetchApi(texto);
-      setTexto("");
+    if (question !== "") {
+      setChatMessages(chatMessages.concat({ message: question, isUser: true }));
+      fetchApi(question);
+      setQuestion("");
     }
   };
 
@@ -67,7 +57,7 @@ const TextScreen = () => {
           style={styles.messagesContainer}
           contentContainerStyle={{ gap: 20 }}
         >
-          {msgs.map((msg, index) =>
+          {chatMessages.map((msg, index) =>
             msg.isUser ? (
               <UserTextMessage message={msg.message} key={index} />
             ) : (
@@ -81,8 +71,8 @@ const TextScreen = () => {
           <View style={styles.inputContainer}>
             <TextInput
               style={{ width: 260, height: 40, paddingHorizontal: 10 }}
-              value={texto}
-              onChangeText={setTexto}
+              value={question}
+              onChangeText={setQuestion}
               onSubmitEditing={_addUserMessage}
             />
           </View>
