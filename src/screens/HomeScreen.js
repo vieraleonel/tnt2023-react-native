@@ -5,7 +5,10 @@ import { SafeScreen } from "../components/SafeScreen";
 import { HomeResumenCard } from "../components/HomeResumenCard";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { getTextResponsesCount } from "../services/analyticsStorageService";
+import {
+  getImageResponsesCount,
+  getTextResponsesCount,
+} from "../services/analyticsStorageService";
 
 const homeCardLinkData = [
   {
@@ -29,18 +32,33 @@ const homeCardLinkData = [
 const HomeScreen = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
-  const [textCount, setTextCount] = useState(null);
+  const [analalyticsCount, setAnalalyticsCount] = useState([]);
 
   const navToScreen = (routeName) => () => navigation.navigate(routeName);
 
-  const getNewCountValue = async () => {
-    const count = await getTextResponsesCount();
-    setTextCount(count);
+  const getCountValues = async () => {
+    const textCount = await getTextResponsesCount();
+    const imageCount = await getImageResponsesCount();
+
+    setAnalalyticsCount([
+      {
+        key: "textCount",
+        iconName: "chatbubbles-sharp",
+        data: textCount,
+        description: "Rtas gen.",
+      },
+      {
+        key: "imageCount",
+        iconName: "image",
+        data: imageCount,
+        description: "Img. gen.",
+      },
+    ]);
   };
 
   useEffect(() => {
     if (isFocused) {
-      getNewCountValue();
+      getCountValues();
     }
   }, [isFocused]);
 
@@ -62,20 +80,12 @@ const HomeScreen = () => {
         <View
           style={{
             flexDirection: "row",
-            justifyContent: "space-between",
+            justifyContent: "space-around",
           }}
         >
-          <HomeResumenCard
-            iconName="chatbubbles-sharp"
-            data={textCount === null ? "..." : textCount}
-            description="Rtas gen."
-          />
-
-          <HomeResumenCard
-            iconName="image"
-            data={1000}
-            description="Img. gen."
-          />
+          {analalyticsCount.map((item) => (
+            <HomeResumenCard {...item} />
+          ))}
         </View>
 
         <View

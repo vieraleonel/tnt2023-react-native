@@ -1,4 +1,5 @@
-import { Camera, CameraType } from "expo-camera";
+import { useNavigation } from "@react-navigation/native";
+import { Camera, CameraType, getAvailablePictureSizesAsync } from "expo-camera";
 import { useRef, useState } from "react";
 import {
   Button,
@@ -8,8 +9,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { ROUTES } from "../navigation/routes";
 
 const CustomCamera = () => {
+  const navigation = useNavigation();
   const camera = useRef(null);
   const [image, setImage] = useState(null);
   const [type, setType] = useState(CameraType.back);
@@ -43,6 +46,7 @@ const CustomCamera = () => {
     if (camera.current) {
       const data = await camera.current.takePictureAsync();
       setImage(data.uri);
+      navigation.replace(ROUTES.IMAGE_CHANNEL, { imageUri: data.uri });
     } else {
       console.warn("Cámara no lista");
     }

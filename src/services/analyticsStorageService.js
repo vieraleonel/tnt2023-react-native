@@ -11,4 +11,20 @@ const incrementTextResponsesCount = async () => {
   return AsyncStorage.setItem("text-responses-count", newValue);
 };
 
-export { getTextResponsesCount, incrementTextResponsesCount };
+const getImageResponsesCount = async () => {
+  const count = await AsyncStorage.getItem("image-responses-count");
+  return count === null ? 0 : parseInt(count);
+};
+
+const incrementImageResponsesCount = async () => {
+  const currentCount = await getImageResponsesCount();
+  const newValue = (currentCount + 1).toString();
+  return AsyncStorage.setItem("image-responses-count", newValue);
+};
+
+export {
+  getTextResponsesCount,
+  incrementTextResponsesCount,
+  getImageResponsesCount,
+  incrementImageResponsesCount,
+};
