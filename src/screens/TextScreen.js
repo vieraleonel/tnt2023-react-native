@@ -8,6 +8,7 @@ import {
   TextInput,
   View,
   Dimensions,
+  Keyboard,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -43,6 +44,7 @@ const TextScreen = () => {
   };
 
   const _addUserMessage = () => {
+    Keyboard.dismiss();
     if (question !== "") {
       setChatMessages(chatMessages.concat({ message: question, isUser: true }));
       fetchApi(question);
