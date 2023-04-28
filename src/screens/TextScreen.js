@@ -15,13 +15,14 @@ import { SafeScreen } from "../components/SafeScreen";
 import { Header } from "../components/Header";
 import { UserTextMessage } from "../components/UserTextMessage";
 import { IaTextMessage } from "../components/IaTextMessage";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { sendQuestionToChatbot } from "../services/IAService";
 import { incrementTextResponsesCount } from "../services/analyticsStorageService";
 
 const TextScreen = () => {
   const [question, setQuestion] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
+  const scrollViewRef = useRef(null);
 
   const fetchApi = async (message) => {
     try {
@@ -55,7 +56,11 @@ const TextScreen = () => {
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
         <ScrollView
           style={styles.messagesContainer}
-          contentContainerStyle={{ gap: 20 }}
+          contentContainerStyle={{ gap: 20, paddingBottom: 20 }}
+          ref={scrollViewRef}
+          onContentSizeChange={() =>
+            scrollViewRef.current.scrollToEnd({ animated: true })
+          }
         >
           {chatMessages.map((msg, index) =>
             msg.isUser ? (
