@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { manipulateAsync } from "expo-image-manipulator";
 import { ROUTES } from "../navigation/routes";
 
 const CustomCamera = () => {
@@ -45,8 +46,11 @@ const CustomCamera = () => {
   const takePicture = async () => {
     if (camera.current) {
       const data = await camera.current.takePictureAsync();
-      setImage(data.uri);
-      navigation.replace(ROUTES.IMAGE_CHANNEL, { imageUri: data.uri });
+      const resized = await manipulateAsync(data.uri, [
+        { resize: { height: 100 } },
+      ]);
+      setImage(resized.uri);
+      navigation.replace(ROUTES.IMAGE_CHANNEL, { imageUri: resized.uri });
     } else {
       console.warn("Cámara no lista");
     }

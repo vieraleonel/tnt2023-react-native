@@ -1,4 +1,4 @@
-const BASE_URL = "http://10.7.70.190:9191";
+const BASE_URL = "https://tnt2023.panaltesting.com.ar";
 
 const sendQuestionToChatbot = async (message) => {
   const response = await fetch(`${BASE_URL}/chat?question=${message}`);
