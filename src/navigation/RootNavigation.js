@@ -41,6 +41,7 @@ const TabNavigator = () => (
     screenOptions={{
       headerShown: false,
       tabBarShowLabel: false,
+      tabBarHideOnKeyboard: true,
     }}
   >
     <Tab.Screen
