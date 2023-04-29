@@ -24,6 +24,7 @@ import {
 } from "@react-navigation/native";
 import { ROUTES } from "../navigation/routes";
 import { sendImageToChatbot } from "../services/IAService";
+import { incrementImageResponsesCount } from "../services/analyticsStorageService";
 
 const ImageScreen = () => {
   const navigation = useNavigation();
@@ -33,6 +34,7 @@ const ImageScreen = () => {
 
   const sendImage = async (imageUri) => {
     const responseImg = await sendImageToChatbot(imageUri);
+    incrementImageResponsesCount();
     setChatMessages((chatMessages) =>
       chatMessages.concat({ imageUri: responseImg, isUser: false })
     );
