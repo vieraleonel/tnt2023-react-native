@@ -1,20 +1,13 @@
 import {
-  Button,
   Dimensions,
   Image,
   KeyboardAvoidingView,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { launchImageLibraryAsync, MediaTypeOptions } from "expo-image-picker";
-import { useEffect, useState } from "react";
-import Constants from "expo-constants";
-import { CustomCamera } from "../components/CustomCamera";
+import { useEffect, useRef, useState } from "react";
 import { SafeScreen } from "../components/SafeScreen";
 import { Header } from "../components/Header";
 import {
@@ -28,6 +21,7 @@ import { incrementImageResponsesCount } from "../services/analyticsStorageServic
 
 const ImageScreen = () => {
   const navigation = useNavigation();
+  const scrollViewRef = useRef(null);
   const params = useRoute().params;
   const isFocused = useIsFocused();
   const [chatMessages, setChatMessages] = useState([]);
@@ -40,24 +34,35 @@ const ImageScreen = () => {
     );
   };
 
+  const addMessage = (imageUri) => {
+    setChatMessages((chatMessages) =>
+      chatMessages.concat({ imageUri: imageUri, isUser: true })
+    );
+    sendImage(imageUri);
+  };
+
   useEffect(() => {
-    if (isFocused && params?.imageUri) {
-      setChatMessages((chatMessages) =>
-        chatMessages.concat({ imageUri: params.imageUri, isUser: true })
-      );
-      sendImage(params.imageUri);
-      navigation.setParams({ imageUri: undefined });
+    if (isFocused) {
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 1000);
     }
-  }, [isFocused, params]);
+  }, [isFocused]);
+
+  const navigateToCamera = () => {
+    navigation.navigate(ROUTES.CAMERA, { addMessage });
+  };
 
   return (
     <SafeScreen>
       <Header title="Canal de Imagen" />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
         <ScrollView
+          ref={scrollViewRef}
           style={styles.messagesContainer}
           contentContainerStyle={{ gap: 20 }}
-        ></ScrollView>
+        >
+        </ScrollView>
         <View
           style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
         >
@@ -66,7 +71,7 @@ const ImageScreen = () => {
               name="camera"
               size={24}
               color="white"
-              onPress={() => navigation.navigate(ROUTES.CAMERA)}
+              onPress={navigateToCamera}
             />
             <Ionicons name="image" size={24} color="white" />
           </View>

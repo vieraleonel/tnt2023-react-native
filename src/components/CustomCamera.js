@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Camera, CameraType } from "expo-camera";
 import { useRef, useState } from "react";
 import { Button, Image, StyleSheet, Text, View } from "react-native";
@@ -8,6 +8,7 @@ import { ROUTES } from "../navigation/routes";
 const CustomCamera = () => {
   const navigation = useNavigation();
   const camera = useRef(null);
+  const params = useRoute().params;
   const [image, setImage] = useState(null);
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
@@ -17,7 +18,6 @@ const CustomCamera = () => {
     return null;
   }
 
-  console.log(permission);
   if (!permission.granted) {
     // Camera permissions are not granted yet
     return (
@@ -43,7 +43,8 @@ const CustomCamera = () => {
         { resize: { height: 100 } },
       ]);
       setImage(resized.uri);
-      navigation.replace(ROUTES.IMAGE_CHANNEL, { imageUri: resized.uri });
+      params?.addMessage(resized.uri);
+      navigation.goBack();
     } else {
       console.warn("Cámara no lista");
     }
