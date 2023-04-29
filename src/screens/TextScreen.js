@@ -1,10 +1,7 @@
 import {
-  Button,
   KeyboardAvoidingView,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
-  Text,
   TextInput,
   View,
   Dimensions,

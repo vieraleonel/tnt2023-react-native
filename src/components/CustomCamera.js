@@ -1,14 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import { Camera, CameraType, getAvailablePictureSizesAsync } from "expo-camera";
+import { Camera, CameraType } from "expo-camera";
 import { useRef, useState } from "react";
-import {
-  Button,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Button, Image, StyleSheet, Text, View } from "react-native";
 import { manipulateAsync } from "expo-image-manipulator";
 import { ROUTES } from "../navigation/routes";
 

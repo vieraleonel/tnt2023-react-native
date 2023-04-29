@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { colors } from "../theme/colors";
 import Constants from "expo-constants";
 import { StatusBar } from "expo-status-bar";
