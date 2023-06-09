@@ -37,8 +37,10 @@ const HomeScreen = () => {
   const navToScreen = (routeName) => () => navigation.navigate(routeName);
 
   const getCountValues = async () => {
-    const textCount = await getTextResponsesCount();
-    const imageCount = await getImageResponsesCount();
+    const [textCount, imageCount] = await Promise.all([
+      getTextResponsesCount(),
+      getImageResponsesCount(),
+    ]);
 
     setAnalalyticsCount([
       {
