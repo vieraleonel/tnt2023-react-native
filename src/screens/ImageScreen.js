@@ -62,6 +62,46 @@ const ImageScreen = () => {
           style={styles.messagesContainer}
           contentContainerStyle={{ gap: 20 }}
         >
+          {chatMessages.map((msg, index) =>
+            msg.isUser ? (
+              <View
+                style={{
+                  backgroundColor: "#0070F0",
+                  padding: 10,
+                  borderTopLeftRadius: 24,
+                  borderTopRightRadius: 24,
+                  borderBottomLeftRadius: 24,
+                  width: 220,
+                  height: 220,
+                  alignSelf: "flex-end",
+                }}
+                key={index}
+              >
+                <Image
+                  source={{ uri: msg.imageUri }}
+                  style={{ width: 200, height: 200 }}
+                />
+              </View>
+            ) : (
+              <View
+                style={{
+                  backgroundColor: "#F2F4F5",
+                  padding: 10,
+                  borderBottomLeftRadius: 24,
+                  borderBottomRightRadius: 24,
+                  borderTopRightRadius: 24,
+                  width: 220,
+                  height: 220,
+                }}
+                key={index}
+              >
+                <Image
+                  source={{ uri: msg.imageUri }}
+                  style={{ width: 200, height: 200 }}
+                />
+              </View>
+            )
+          )}
         </ScrollView>
         <View
           style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
